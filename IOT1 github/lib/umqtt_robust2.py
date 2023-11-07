@@ -9,7 +9,7 @@ from time import ticks_ms
 from machine import Pin
 from neopixel import NeoPixel
 
-stop_thread = 0
+stop_thread = 0 #definere en variabel stop_thread
 
 n = 12
 p = 27
@@ -47,33 +47,33 @@ if wifi.isconnected():
     wifi.disconnect()#Fixer WiFi OS fejl!
 wifi.active(True)
 
-def set_color(r, g, b):
-    for pixels in range(n):
+def set_color(r, g, b): #Definere set_color
+    for pixels in range(n): #for loop
         np[pixels] = (r, g, b)
         np.write()
         sleep(0.001)
 
-def neo_spin():
-    spin = 0
-    connecting = 1
-    while connecting == 1:
-        np[spin] = (15, 15, 15)
-        np[spin - 1] = (8, 8, 8)
-        np[spin - 2] = (1, 1, 1)
-        np[spin - 3] = (0, 0, 0)
-        np.write()
-        spin = spin + 1
-        if spin == 12:
-            spin = 0
-        sleep(0.1)
-        if stop_thread == 1:
-            break
+def neo_spin(): #definerer funktionen neo_spin
+    spin = 0 #led starter med ikke at lyse
+    connecting = 1 #Begynder at lyse
+    while connecting == 1: #while loop, hvor neopixel lyser hvidt
+        np[spin] = (15, 15, 15) #skarpest farve
+        np[spin - 1] = (8, 8, 8) #mindre
+        np[spin - 2] = (1, 1, 1) #mindst
+        np[spin - 3] = (0, 0, 0) #slukket
+        np.write() #starter neopixel
+        spin = spin + 1 #plusser spin med 1 så neopix bliver ved med at køre rundt ring.
+        if spin == 12: #if condition, hvis den er nået en hel omgang.
+            spin = 0  #Starter forfra
+        sleep(0.1) #sover 0.1
+        if stop_thread == 1: #If condition hvis stop_thread == 1 stopper neopixel
+            break #stopper
 
-def thread1(thread_id):
-    while True:
-        neo_spin()
-        if stop_thread == 1:
-            break
+def thread1(thread_id): #Definerer thread1 med argumentet thread_id
+    while True: #while true loop som før
+        neo_spin() #Kører neo_spin funktion
+        if stop_thread == 1: #if condition
+            break #Stopper
     
 def do_connect():
     if not wifi.isconnected():
@@ -92,14 +92,14 @@ def do_connect():
             
             utime.sleep(1)
 
-        if attempt_count == MAX_ATTEMPTS:
-            print('Kunne ikke forbinde til WiFi')
-            sys.exit()
-            for i in range(3):
-                set_color(10, 0, 0)
-                sleep(0.2)
-                set_color(0, 0, 0)
-                sleep(0.2)
+        if attempt_count == MAX_ATTEMPTS: #hvis max attemps så print
+            print('Kunne ikke forbinde til WiFi') #print i shell
+            sys.exit() #Lukker programmet
+            for i in range(3): #for loop skal køre 3 gange
+                set_color(10, 0, 0) #Rød farve
+                sleep(0.2) #sover 0.2sek
+                set_color(0, 0, 0) #slukker
+                sleep(0.2) #sover 0.2sek
 
 do_connect()
 
@@ -163,12 +163,12 @@ def web_print(text_in, feed = mqtt_feedname):
         print(f"Not sending: \nMessage: {text_in} \nTo feed: {feed}  \nplease wait 3 seconds or more before sending the next message.")
 
 
-if not c.connect(clean_session=False):
-    print("Forbinder til Adafruit IO, med klient ID: ",random_num)
+if not c.connect(clean_session=False): #if condition for hvis den ER connectet
+    print("Forbinder til Adafruit IO, med klient ID: ",random_num) #Print i shell
     c.subscribe(mqtt_feedname)
-    stop_thread = 1
-    for i in range(3):
-        set_color(0, 100, 0)
-        sleep(0.2)
-        set_color(0, 0, 0)
-        sleep(0.2)
+    stop_thread = 1 #ændre stopthread til 1
+    for i in range(3): #for loop der skal køre 3 gange, hvor farve = grøn
+        set_color(0, 100, 0) #Grøn
+        sleep(0.2) #sover 0.2
+        set_color(0, 0, 0) #Slukker
+        sleep(0.2) #sover 0.2
